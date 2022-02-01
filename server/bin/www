@@ -11,6 +11,7 @@ const { app, sessionStore } = require("../app");
 const http = require("http");
 const db = require("../db");
 const onlineUsers = require("../onlineUsers");
+const { Conversation } = require("../db/models");
 
 /**
  * Get port from environment and store in Express.
@@ -44,6 +45,7 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("new-message", {
       message: data.message,
       sender: data.sender,
+      recipientId: data.recipientId,
     });
   });
 
@@ -54,6 +56,16 @@ io.on("connection", (socket) => {
       socket.broadcast.emit("remove-offline-user", id);
     }
   });
+
+  socket.on('mark-messages-read', async (conversationId, userId) => {
+    const conversation = await Conversation.findByPk(conversationId);
+    if (conversation.user1Id === userId) {
+      conversation.clearUser1UnreadCount();
+    } else {
+      conversation.clearUser2UnreadCount();
+    }
+    await conversation.save();
+  })
 });
 
 sessionStore

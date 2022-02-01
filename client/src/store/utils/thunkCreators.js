@@ -5,6 +5,7 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  updateReadStatus,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -100,7 +101,7 @@ export const postMessage = (body) => async (dispatch) => {
     if (!body.conversationId) {
       dispatch(addConversation(body.recipientId, data.message));
     } else {
-      dispatch(setNewMessage(data.message));
+      dispatch(setNewMessage(data.message, null, true));
     }
 
     sendMessage(data, body);
@@ -117,3 +118,8 @@ export const searchUsers = (searchTerm) => async (dispatch) => {
     console.error(error);
   }
 };
+
+export const markMessagesRead = (conversationId, userId) => async (dispatch) => {
+  socket.emit('mark-messages-read', conversationId, userId);
+  dispatch(updateReadStatus(conversationId, userId));
+}

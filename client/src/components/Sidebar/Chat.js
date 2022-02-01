@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@material-ui/core";
+import { Box, Badge } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { makeStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../store/activeConversation";
@@ -16,7 +16,12 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       cursor: "grab"
     }
-  }
+  },
+  badge: {
+    "& > *": {
+      right: '15px',
+    },
+  } 
 }));
 
 const Chat = (props) => {
@@ -36,7 +41,16 @@ const Chat = (props) => {
         online={otherUser.online}
         sidebar={true}
       />
-      <ChatContent conversation={conversation} />
+      <ChatContent  
+        conversation={conversation} 
+        unreadMessages={conversation.unreadCount > 0} 
+      />
+
+      <Badge 
+        className={classes.badge} 
+        badgeContent={conversation.unreadCount} 
+        color="primary" >
+      </Badge>
     </Box>
   );
 };
