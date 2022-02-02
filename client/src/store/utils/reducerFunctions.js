@@ -18,7 +18,7 @@ export const addMessageToStore = (state, payload) => {
         ...convo,
         messages: [...convo.messages, message],
         latestMessageText: message.text,
-        unreadCount: skipIncrement ? 0 : convo.unreadCount + 1,
+        unreadCount: convo.unreadCount + 1,
       }
     } else {
       return convo;

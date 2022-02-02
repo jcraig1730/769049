@@ -101,7 +101,7 @@ export const postMessage = (body) => async (dispatch) => {
     if (!body.conversationId) {
       dispatch(addConversation(body.recipientId, data.message));
     } else {
-      dispatch(setNewMessage(data.message, null, true));
+      dispatch(setNewMessage(data.message));
     }
 
     sendMessage(data, body);
@@ -120,6 +120,11 @@ export const searchUsers = (searchTerm) => async (dispatch) => {
 };
 
 export const markMessagesRead = (conversationId, userId) => async (dispatch) => {
-  socket.emit('mark-messages-read', conversationId, userId);
-  dispatch(updateReadStatus(conversationId, userId));
+  try {
+    const body = { conversationId, userId };
+    await axios.post('/api/messages/mark-read', body);
+    dispatch(updateReadStatus(conversationId, userId));
+  } catch(error) {
+    console.error(error);
+  }
 }
