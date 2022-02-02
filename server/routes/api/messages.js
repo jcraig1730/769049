@@ -15,9 +15,6 @@ router.post("/", async (req, res, next) => {
     if (conversationId) {
       const message = await Message.create({ senderId, text, conversationId });
       const conversation = await Conversation.findByPk(conversationId);
-      senderId === conversation.user1Id 
-      ? conversation.incrementUser2UnreadCount() 
-      : conversation.incrementUser1UnreadCount(); 
       await conversation.save();
       return res.json({ message, sender });
     }
@@ -48,5 +45,15 @@ router.post("/", async (req, res, next) => {
     next(error);
   }
 });
+
+router.post('/mark-read', async (req, res, next) => {
+  try {
+    const { conversationId, userId } = req.body;
+    await Message.updateReadStatus(conversationId, userId)
+    res.status(204).send();
+  } catch(error) {
+    next(error);
+  }
+})
 
 module.exports = router;

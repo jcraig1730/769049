@@ -56,16 +56,6 @@ io.on("connection", (socket) => {
       socket.broadcast.emit("remove-offline-user", id);
     }
   });
-
-  socket.on('mark-messages-read', async (conversationId, userId) => {
-    const conversation = await Conversation.findByPk(conversationId);
-    if (conversation.user1Id === userId) {
-      conversation.clearUser1UnreadCount();
-    } else {
-      conversation.clearUser2UnreadCount();
-    }
-    await conversation.save();
-  })
 });
 
 sessionStore
