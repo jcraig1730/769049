@@ -49,8 +49,9 @@ const Chat = (props) => {
       <Badge 
         className={classes.badge} 
         badgeContent={conversation.unreadCount} 
-        color="primary" >
-      </Badge>
+        color="primary" 
+      />
+ 
     </Box>
   );
 };
