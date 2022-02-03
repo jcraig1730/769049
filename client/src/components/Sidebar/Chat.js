@@ -44,6 +44,8 @@ const Chat = (props) => {
     setUnreadCount(unreadCount);
   }, [props.conversation.messages, conversation.otherUser.id])
 
+  const unreadMessages = unreadCount > 0;
+
   return (
     <Box onClick={() => handleClick(conversation)} className={classes.root}>
       <BadgeAvatar
@@ -53,8 +55,9 @@ const Chat = (props) => {
         sidebar={true}
       />
       <ChatContent  
-        conversation={conversation} 
-        unreadMessages={unreadCount > 0} 
+        conversation={conversation}
+        color={unreadMessages && 'black'}
+        fontWeight={unreadMessages && '800'} 
       />
 
       <Badge 
