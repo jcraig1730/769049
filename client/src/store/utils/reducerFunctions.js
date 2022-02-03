@@ -1,5 +1,5 @@
 export const addMessageToStore = (state, payload) => {
-  const { message, sender, skipIncrement } = payload;
+  const { message, sender } = payload;
   // if sender isn't null, that means the message needs to be put in a brand new convo
   if (sender !== null) {
     const newConvo = {
@@ -85,12 +85,21 @@ export const addNewConvoToStore = (state, recipientId, message) => {
   });
 };
 
-export const updateMessageReadStatusInStore = (state, { conversationId }) => {
+export const updateMessageReadStatusInStore = (state, { conversationId, userId }) => {
   return state.map(convo => {
     if (conversationId === convo.id) {
       return {
         ...convo,
-        unreadCount: 0,
+        messages: convo.messages.map(msg => {
+          if (msg.senderId !== userId) {
+            return {
+              ...msg,
+              read: true,
+            }
+          } else {
+            return msg
+          }
+        })
       };
     } else {
       return convo;

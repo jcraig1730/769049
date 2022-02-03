@@ -55,11 +55,9 @@ router.get("/", async (req, res, next) => {
       if (convoJSON.user1) {
         convoJSON.otherUser = convoJSON.user1;
         delete convoJSON.user1;
-        convoJSON.unreadCount = getUnreadCount(convoJSON);
       } else if (convoJSON.user2) {
         convoJSON.otherUser = convoJSON.user2;
         delete convoJSON.user2;
-        convoJSON.unreadCount = getUnreadCount(convoJSON);
       }
 
       // set property for online status of the other user
@@ -83,13 +81,5 @@ router.get("/", async (req, res, next) => {
     next(error);
   }
 });
-
-const getUnreadCount = (convoJSON) => convoJSON.messages.reduce((total, cur) => {
-  if (cur.senderId === convoJSON.otherUser.id && !cur.read) {
-    total += 1;
-  }
-  return total;
-}, 0)
-
 
 module.exports = router;

@@ -28,24 +28,32 @@ const useStyles = makeStyles(() => ({
     color: "#FFFFFF",
     letterSpacing: -0.2,
     padding: 8
-  }
+  },
+  lastReadAvatar: props => props.avatarStyle,
 }));
 
 const OtherUserBubble = (props) => {
-  const classes = useStyles();
-  const { text, time, otherUser } = props;
+  const { text, time, otherUser, lastRead, avatarStyle } = props;
+  const classes = useStyles({avatarStyle});
   return (
-    <Box className={classes.root}>
-      <Avatar alt={otherUser.username} src={otherUser.photoUrl} className={classes.avatar}></Avatar>
-      <Box>
-        <Typography className={classes.usernameDate}>
-          {otherUser.username} {time}
-        </Typography>
-        <Box className={classes.bubble}>
-          <Typography className={classes.text}>{text}</Typography>
+    <>
+      <Box className={classes.root}>
+        <Avatar alt={otherUser.username} src={otherUser.photoUrl} className={classes.avatar}></Avatar>
+        <Box>
+          <Typography className={classes.usernameDate}>
+            {otherUser.username} {time}
+          </Typography>
+          <Box className={classes.bubble}>
+            <Typography className={classes.text}>{text}</Typography>
+          </Box>
         </Box>
       </Box>
-    </Box>
+      { lastRead && <Avatar 
+          alt={otherUser.username} 
+          src={otherUser.photoUrl} 
+          className={classes.lastReadAvatar}
+          /> }
+      </>
   );
 };
 

@@ -56,6 +56,10 @@ io.on("connection", (socket) => {
       socket.broadcast.emit("remove-offline-user", id);
     }
   });
+
+  socket.on("mark-read", (conversationId, userId) => {
+    socket.broadcast.emit('mark-read', { conversationId, userId });
+  })
 });
 
 sessionStore

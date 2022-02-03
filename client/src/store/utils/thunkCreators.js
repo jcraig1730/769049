@@ -124,6 +124,7 @@ export const markMessagesRead = (conversationId, userId) => async (dispatch) => 
     const body = { conversationId, userId };
     await axios.post('/api/messages/mark-read', body);
     dispatch(updateReadStatus(conversationId, userId));
+    socket.emit('mark-read', conversationId, userId);
   } catch(error) {
     console.error(error);
   }

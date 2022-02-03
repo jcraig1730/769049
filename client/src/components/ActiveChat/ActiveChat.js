@@ -29,7 +29,12 @@ const ActiveChat = (props) => {
   useEffect(() => {
     if (!conversation.id) return;
     markMessagesRead(conversation?.id, user.id);
-  }, [props.conversation?.messages.length])
+  }, [
+      props.conversation?.messages.length, 
+      conversation.id, markMessagesRead, 
+      user.id
+    ]
+  )
 
   return (
     <Box className={classes.root}>
