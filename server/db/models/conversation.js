@@ -1,4 +1,4 @@
-const { Op } = require("sequelize");
+const { Op, INTEGER } = require("sequelize");
 const db = require("../db");
 const Message = require("./message");
 
@@ -21,5 +21,6 @@ Conversation.findConversation = async function (user1Id, user2Id) {
   // return conversation or null if it doesn't exist
   return conversation;
 };
+
 
 module.exports = Conversation;

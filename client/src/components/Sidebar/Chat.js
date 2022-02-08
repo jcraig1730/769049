@@ -1,5 +1,5 @@
-import React from "react";
-import { Box } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { Box, Badge } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { makeStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../store/activeConversation";
@@ -16,17 +16,35 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       cursor: "grab"
     }
-  }
+  },
+  badge: {
+    "& > *": {
+      right: '15px',
+    },
+  } 
 }));
 
 const Chat = (props) => {
   const classes = useStyles();
   const { conversation } = props;
   const { otherUser } = conversation;
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const handleClick = async (conversation) => {
     await props.setActiveChat(conversation.otherUser.username);
   };
+
+  useEffect(() => {
+    const unreadCount = props.conversation.messages.reduce((count, msg) => {
+      if (msg.senderId === conversation.otherUser.id && !msg.read) {
+        return count + 1;
+      }
+      return count;
+    }, 0)
+    setUnreadCount(unreadCount);
+  }, [props.conversation.messages, conversation.otherUser.id])
+
+  const unreadMessages = unreadCount > 0;
 
   return (
     <Box onClick={() => handleClick(conversation)} className={classes.root}>
@@ -36,7 +54,18 @@ const Chat = (props) => {
         online={otherUser.online}
         sidebar={true}
       />
-      <ChatContent conversation={conversation} />
+      <ChatContent  
+        conversation={conversation}
+        color={unreadMessages && 'black'}
+        fontWeight={unreadMessages && '800'} 
+      />
+
+      <Badge 
+        className={classes.badge} 
+        badgeContent={unreadCount} 
+        color="primary" 
+      />
+ 
     </Box>
   );
 };
