@@ -4,16 +4,14 @@ import { SenderBubble, OtherUserBubble } from "../ActiveChat";
 import moment from "moment";
 
 const Messages = (props) => {
-  const [unreadMessageId, setUnreadMessageId] = useState();
+  const [lastReadId, setLastReadId] = useState();
   const { messages, otherUser, userId } = props;
 
   useEffect(() => {
-    const firstUnreadMessageIndex = messages.findIndex(message => {
-      return (!message.read && message.senderId === userId);
-    })
-    firstUnreadMessageIndex > -1
-      ? setUnreadMessageId(messages[firstUnreadMessageIndex - 1]?.id)
-      : setUnreadMessageId(messages[messages.length - 1]?.id);
+    const lastReadMessage = messages.reduce((lastReadMessage, message) => {
+      return (message.read && message.senderId === userId) ? message : lastReadMessage;
+    }, null)
+    setLastReadId(lastReadMessage?.id);
   }, [messages, userId])
 
   const avatarStyle = {
@@ -27,7 +25,7 @@ const Messages = (props) => {
     <Box>
       {messages.map((message) => {
         const time = moment(message.createdAt).format("h:mm");
-        const lastRead = unreadMessageId === message.id
+        const lastRead = lastReadId === message.id
         return message.senderId === userId ? (
           <SenderBubble 
             avatarStyle={avatarStyle} 
