@@ -122,7 +122,7 @@ export const searchUsers = (searchTerm) => async (dispatch) => {
 export const markMessagesRead = (conversationId, userId) => async (dispatch) => {
   try {
     const body = { conversationId, userId };
-    await axios.post('/api/messages/mark-read', body);
+    await axios.put('/api/messages/mark-read', body);
     dispatch(updateReadStatus(conversationId, userId));
     socket.emit('mark-read', conversationId, userId);
   } catch(error) {
