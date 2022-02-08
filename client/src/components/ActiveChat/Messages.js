@@ -9,7 +9,7 @@ const Messages = (props) => {
 
   useEffect(() => {
     const firstUnreadMessageIndex = messages.findIndex(message => {
-      return (message.read === false && message.senderId === userId);
+      return (!message.read && message.senderId === userId);
     })
     firstUnreadMessageIndex > -1
       ? setUnreadMessageId(messages[firstUnreadMessageIndex - 1]?.id)

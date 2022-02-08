@@ -27,8 +27,7 @@ const ActiveChat = (props) => {
   const conversation = props.conversation || {};
 
   useEffect(() => {
-    if (!conversation.id) return;
-    markMessagesRead(conversation?.id, user.id);
+    if (conversation.id) markMessagesRead(conversation?.id, user.id);
   }, [
       props.conversation?.messages.length, 
       conversation.id, markMessagesRead, 

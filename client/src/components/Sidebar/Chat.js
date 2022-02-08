@@ -36,7 +36,7 @@ const Chat = (props) => {
 
   useEffect(() => {
     const unreadCount = props.conversation.messages.reduce((count, msg) => {
-      if (msg.senderId === conversation.otherUser.id && msg.read === false) {
+      if (msg.senderId === conversation.otherUser.id && !msg.read) {
         return count + 1;
       }
       return count;
