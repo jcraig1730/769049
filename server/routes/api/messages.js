@@ -48,6 +48,9 @@ router.post("/", async (req, res, next) => {
 
 router.put('/mark-read', async (req, res, next) => {
   try {
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
     const { conversationId, userId } = req.body;
     await Message.updateReadStatus(conversationId, userId)
     res.status(204).send();
